@@ -6,7 +6,4 @@ const generarJWT = (id,rol)=>{
 
 
 
-
-
-
 export default  generarJWT

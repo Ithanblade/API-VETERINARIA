@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken'
 import Veterinario from '../models/Veterinario.js'
+import Paciente from '../models/Paciente.js'
 
 //Método para verificar el Token
 const verificarAutenticacion = async (req,res,next)=>{
 
-//Verifica que existla el token
+//Verifica que exista el token
 if(!req.headers.authorization) return res.status(404).json({msg:"Lo sentimos, debes proprocionar un token"})    
     const {authorization} = req.headers
     try {
@@ -12,13 +13,14 @@ if(!req.headers.authorization) return res.status(404).json({msg:"Lo sentimos, de
         if (rol==="veterinario"){
             req.veterinarioBDD = await Veterinario.findById(id).lean().select("-password")
             next()
-        }else{
+        }
+        else{
             req.pacienteBDD = await Paciente.findById(id).lean().select("-password")
             next()
         }
     } catch (error) {
         const e = new Error("Formato del token no válido")
-        return res.status(404).json({msg:e.message})
+        return res.status(404).json({error:e.message})
     }
 }
 
